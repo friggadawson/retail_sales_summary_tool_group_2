@@ -4,13 +4,13 @@ from retail_cleaning import clean_superstore
 
 def product_performance():
 
-    # 1️⃣ Load dataset
+    # 1. Load dataset
     df = pd.read_csv("data/raw/superstore.csv", encoding="latin1")
 
-    # 2️⃣ Clean dataset
+    # 2. Clean dataset
     df, report = clean_superstore(df)
 
-    # 3️⃣ Top selling products (by Sales)
+    # 3. Top selling products
     top_selling = (
         df.groupby("Product Name")["Sales"]
         .sum()
@@ -18,13 +18,17 @@ def product_performance():
         .head(10)
     )
 
-    # 4️⃣ Least profitable products
+    # 4. Least profitable products
     least_profitable = (
         df.groupby("Product Name")["Profit"]
         .sum()
         .sort_values()
         .head(10)
     )
+
+    # 5. Save results to Reports folder
+    top_selling.to_csv("Reports/top_selling_products.csv")
+    least_profitable.to_csv("Reports/least_profitable_products.csv")
 
     return top_selling, least_profitable, report
 
