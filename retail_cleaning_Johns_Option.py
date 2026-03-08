@@ -3,18 +3,29 @@ import matplotlib.pyplot as plt
 
 # RST-01 — DATA LOADING & CLEANING
 
-def load_dataset(filepath):
-    filepath = ("superstore.csv")
-    df = pd.read_csv(filepath)
+def clean_dataset(df):
+    """
+    Cleans the dataset:
+    - Converts date columns to datetime
+    - Converts Sales and Profit to numeric
+    - Drops rows with missing values
+    - Adds Profit Margin column
+    """
+
+    # Convert dates
+    df['Order Date'] = pd.to_datetime(df['Order Date'], format='mixed', dayfirst=True, errors='coerce')
+    df['Ship Date'] = pd.to_datetime(df['Ship Date'], format='mixed', dayfirst=True, errors='coerce')
+
+    # Convert numeric columns
+    df['Sales'] = pd.to_numeric(df['Sales'], errors='coerce')
+    df['Profit'] = pd.to_numeric(df['Profit'], errors='coerce')
+
+    # Remove invalid rows
+    df = df.dropna(subset=['Sales', 'Profit'])
+
+    # Create profit margin
+    df['Profit Margin'] = df['Profit'] / df['Sales']
+
     return df
 
-def clean_dataset(df):
-
-    df['Order Date'] = pd.to_datetime(df['Order Date'])
-    df['Ship Date'] = pd.to_datetime(df['Ship Date'])
-    
-    df = df.dropna(subset=['Sales', 'Profit'])
-    df['Profit Margin'] = df['Profit'] / df['Sales']
-    
-    return df.head()
 
