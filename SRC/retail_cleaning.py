@@ -1,3 +1,22 @@
+
+import pandas as pd
+
+def clean_superstore(df):
+
+    report = {}
+
+    # Remove duplicate rows
+    rows_before = len(df)
+    df = df.drop_duplicates()
+    report["duplicates_removed"] = rows_before - len(df)
+
+    # Handle missing values
+    report["missing_values_before"] = df.isnull().sum().sum()
+    df = df.dropna()
+    report["missing_values_after"] = df.isnull().sum().sum()
+
+    return df, report
+
 # retail_cleaning.py (fallback)
 from dataclasses import dataclass, asdict
 from typing import Dict, Tuple, Union
@@ -72,3 +91,4 @@ def clean_superstore(df_or_path: Union[str, pd.DataFrame]) -> Tuple[pd.DataFrame
         if c not in df.columns: df[c]=np.nan
     df=df.drop_duplicates(); dup=rows_before-len(df)
     return df, DataQualityReport(rows_before,len(df),dup,n_fail,d_fail)
+
